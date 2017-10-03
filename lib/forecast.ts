@@ -4,7 +4,8 @@ import { getUrl, ForecastResponse } from "./api";
 
 interface ForecastData {
 	date: string;
-	temperature: number;
+	temperatureF: number;
+	temperatureC: number;
 	main: string;
 	description: string;
 }
@@ -31,7 +32,8 @@ enum State {
 				<div class="item-main">{{ item.main }}</div>
 				<div class="item-description">{{ item.description }}</div>
 				<div class="item-temperature">
-				{{ item.temperature }} {{ temperatureUnit }}
+					<p>{{ item.temperatureF }} {{ temperatureUnit }}</p>
+				    {{ item.temperatureC }} {{temperatureUnitC}}
 				</div>
 			</li>
 		</ul>
@@ -82,6 +84,7 @@ export class Forecast {
 	}
 
 	temperatureUnit = "degrees Fahrenheit";
+	temperatureUnitC = "degrees Celsius"
 
 	private _tomorrow = false;
 	@Input()
@@ -144,7 +147,8 @@ export class Forecast {
 
 		this.fullData = data.list.map(item => ({
 			date: this.formatDate(new Date(item.dt * 1000)),
-			temperature: Math.round(item.main.temp * (9/5) - 459.67),
+			temperatureF: Math.round(item.main.temp * (9/5) - 459.67),
+			temperatureC: Math.round(item.main.temp - 273.15),
 			main: item.weather[0].main,
 			description: item.weather[0].description
 		}));
